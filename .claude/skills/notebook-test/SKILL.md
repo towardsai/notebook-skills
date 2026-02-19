@@ -1,3 +1,8 @@
+---
+name: notebook-test
+description: Test an existing Jupyter notebook by executing it in an isolated environment and reporting results. Read-only -- does not modify the notebook.
+---
+
 # notebook-test
 
 **Description:** Test an existing Jupyter notebook by executing it in an isolated environment and reporting results. Read-only -- does not modify the notebook.

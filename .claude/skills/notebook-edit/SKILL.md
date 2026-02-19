@@ -1,3 +1,8 @@
+---
+name: notebook-edit
+description: Edit an existing Jupyter notebook -- make changes, test execution, and convert back.
+---
+
 # notebook-edit
 
 **Description:** Edit an existing Jupyter notebook -- make changes, test execution, and convert back.

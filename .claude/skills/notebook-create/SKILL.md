@@ -1,3 +1,8 @@
+---
+name: notebook-create
+description: Create a new Jupyter notebook from scratch, with tested dependencies and verified execution.
+---
+
 # notebook-create
 
 **Description:** Create a new Jupyter notebook from scratch, with tested dependencies and verified execution.
