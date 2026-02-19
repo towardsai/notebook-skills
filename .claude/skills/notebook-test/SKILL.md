@@ -11,7 +11,7 @@ description: Test an existing Jupyter notebook by executing it in an isolated en
 
 ## Shared Workflow
 
-**Read [../shared/NOTEBOOK_WORKFLOW.md](../shared/NOTEBOOK_WORKFLOW.md) first.** It covers the two-environment architecture, jupytext setup, dependency validation, API key management, LLM defaults, error handling, and cleanup.
+**Read [./NOTEBOOK_WORKFLOW.md](./NOTEBOOK_WORKFLOW.md) first.** It covers the two-environment architecture, jupytext setup, dependency validation, API key management, LLM defaults, error handling, and cleanup.
 
 ---
 

@@ -11,7 +11,7 @@ description: Create a new Jupyter notebook from scratch, with tested dependencie
 
 ## Shared Workflow
 
-**Read [../shared/NOTEBOOK_WORKFLOW.md](../shared/NOTEBOOK_WORKFLOW.md) first.** It covers the two-environment architecture, jupytext setup, dependency validation, API key management, LLM defaults, error handling, and cleanup.
+**Read [./NOTEBOOK_WORKFLOW.md](./NOTEBOOK_WORKFLOW.md) first.** It covers the two-environment architecture, jupytext setup, dependency validation, API key management, LLM defaults, error handling, and cleanup.
 
 ---
 
