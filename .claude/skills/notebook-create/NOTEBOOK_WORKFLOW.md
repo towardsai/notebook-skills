@@ -205,14 +205,31 @@ except ImportError:
     GOOGLE_API_KEY = os.environ['GOOGLE_API_KEY']
 ```
 
-Set the API key before running:
+Set the API key before running (see `.env` auto-loading below), or manually:
 
 ```bash
 export GOOGLE_API_KEY="your-key-here"
 uv run --python venv_notebook/bin/python <notebook_name>.py
 ```
 
-**Note:** `uv run` does not automatically forward all environment variables or load `.env` files. Always ensure the key is exported in your current shell session before running.
+---
+
+## .env Auto-Loading
+
+If the project has a `.env` file in its root directory, **always load it before running any Python script**. This replaces manual `export` commands:
+
+```bash
+# Load environment variables from .env if it exists
+if [ -f "$PROJECT_DIR/.env" ]; then
+  export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs)
+fi
+```
+
+Run this **before** every `uv run` invocation. This ensures API keys and other secrets defined in `.env` are available to the notebook runtime without hardcoding them in commands.
+
+**Notes:**
+- `uv run` does not automatically forward all environment variables or load `.env` files — this step is required.
+- The `.env` file is git-ignored and should never be committed.
 
 ### Framework-Specific Environment Variables
 
@@ -243,7 +260,10 @@ uv run --python venv_notebook/bin/python <notebook_name>.py
 For notebooks with API calls, set the required environment variables first:
 
 ```bash
-export GOOGLE_API_KEY="your-key-here"
+# Load .env if it exists
+if [ -f "$PROJECT_DIR/.env" ]; then
+  export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs)
+fi
 uv run --python venv_notebook/bin/python <notebook_name>.py
 ```
 
@@ -288,7 +308,9 @@ You can add extra debugging prints freely in the `.py` script during development
 - Use absolute paths instead of relative paths
 - If stuck, open a fresh shell session
 
-### Import Errors or Test Failures
+### Import Errors or Test Failures (notebook-create and notebook-edit only)
+
+**This section applies to `notebook-create` and `notebook-edit` only. The `notebook-test` skill is read-only and must NOT modify the `.py` script — it should report errors instead.**
 
 - Identify the problematic code in the `.py` file
 - Fix the errors directly in the `.py` file

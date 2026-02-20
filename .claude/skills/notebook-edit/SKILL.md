@@ -11,7 +11,7 @@ description: Edit an existing Jupyter notebook -- make changes, test execution, 
 
 ## Shared Workflow
 
-**Read [./NOTEBOOK_WORKFLOW.md](./NOTEBOOK_WORKFLOW.md) first.** It covers the two-environment architecture, jupytext setup, dependency validation, API key management, LLM defaults, error handling, and cleanup.
+**Read [../notebook-create/NOTEBOOK_WORKFLOW.md](../notebook-create/NOTEBOOK_WORKFLOW.md) first.** It covers the two-environment architecture, jupytext setup, dependency validation, API key management, LLM defaults, error handling, and cleanup.
 
 ---
 
@@ -63,7 +63,10 @@ If you add or change dependencies:
 ### 5. Test Execution
 
 ```bash
-export GOOGLE_API_KEY="your-key-here"  # if needed
+# Load .env if it exists
+if [ -f "$PROJECT_DIR/.env" ]; then
+  export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs)
+fi
 uv run --python venv_notebook/bin/python <notebook_name>.py
 ```
 
@@ -107,7 +110,7 @@ uv pip install --python venv_notebook $(cat requirements.txt)
 # 5. If deps changed: re-validate (see shared workflow)
 
 # 6. Test
-export GOOGLE_API_KEY="your-key-here"  # if needed
+if [ -f "$PROJECT_DIR/.env" ]; then export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs); fi
 uv run --python venv_notebook/bin/python <notebook_name>.py
 
 # 7. Fix errors and re-test until passing

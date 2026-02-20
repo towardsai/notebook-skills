@@ -81,7 +81,10 @@ print(f"langchain version: {langchain.__version__}")
 ### 5. Test Execution
 
 ```bash
-export GOOGLE_API_KEY="your-key-here"  # if needed
+# Load .env if it exists
+if [ -f "$PROJECT_DIR/.env" ]; then
+  export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs)
+fi
 uv run --python venv_notebook/bin/python <notebook_name>.py
 ```
 
@@ -139,7 +142,7 @@ uv pip install --python venv_notebook $(cat verified_versions.txt)
 # 6. Write <notebook_name>.py (use Write tool, with verified versions)
 
 # 7. Test
-export GOOGLE_API_KEY="your-key-here"  # if needed
+if [ -f "$PROJECT_DIR/.env" ]; then export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs); fi
 uv run --python venv_notebook/bin/python <notebook_name>.py
 
 # 8. Fix errors and re-test until passing
