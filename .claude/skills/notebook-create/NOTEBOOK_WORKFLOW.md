@@ -92,6 +92,29 @@ import package1
 
 ---
 
+## Colab-Specific Code
+
+Some notebooks contain code that only works in Google Colab and will fail or behave unexpectedly when run locally. This code must be temporarily removed before local execution.
+
+### Patterns to Identify and Remove
+
+| Pattern | Why it fails locally |
+|---|---|
+| `IPython.Application.instance().kernel.do_shutdown(True)` | Kills the local Python process immediately |
+| `from google.colab import drive` / `drive.mount(...)` | Google Drive not available locally |
+| `from google.colab import files` + `files.upload()` / `files.download()` | Interactive file dialogs not available locally |
+| `from google.colab import output` (non-fallback usage) | Colab-only display API |
+
+> **Note:** `from google.colab import userdata` is **not** in this list — it's already handled by the existing try/except fallback pattern and works correctly locally.
+
+### Handling Strategy by Skill
+
+**`notebook-test`**: After converting `.ipynb` → `.py`, scan the file for Colab-specific lines and use the Edit tool to remove them from the `.py` before executing. No restoration is needed (notebook-test never converts back to `.ipynb`). Note the removed lines in the final report.
+
+**`notebook-edit` and `notebook-create`**: Before testing the `.py` script, scan for and remove Colab-specific lines using the Edit tool. **Remember which lines were removed and their exact position.** After the script runs successfully, restore those lines in the `.py` file before running `jupytext --to notebook` to convert back to `.ipynb`.
+
+---
+
 ## Dependency Validation Workflow
 
 Notebooks specify exact package versions in `!pip install` cells. These versions MUST be installable together without conflicts.

@@ -80,6 +80,8 @@ print(f"langchain version: {langchain.__version__}")
 
 ### 5. Test Execution
 
+Before running, read the `.py` file and use the Edit tool to remove any Colab-specific lines (see the shared workflow's "Colab-Specific Code" section for patterns). Remember what you removed and where — you will need to restore them in step 6.
+
 ```bash
 # Load .env if it exists
 if [ -f "$PROJECT_DIR/.env" ]; then
@@ -92,7 +94,9 @@ If errors occur, fix them in the `.py` file and re-test. See the shared workflow
 
 ### 6. Convert to Notebook
 
-Once the code runs successfully:
+Before converting, restore any Colab-specific lines that were removed in step 5. Use the Edit tool to add them back in their original positions in the `.py` file.
+
+Once restored:
 
 ```bash
 $PROJECT_DIR/.venv_tools/bin/jupytext --to notebook <notebook_name>.py --output $PROJECT_DIR/notebooks/<notebook_name>.ipynb
@@ -141,13 +145,19 @@ uv pip install --python venv_notebook $(cat verified_versions.txt)
 
 # 6. Write <notebook_name>.py (use Write tool, with verified versions)
 
-# 7. Test
+# 7. Remove Colab-specific lines from <notebook_name>.py (Edit tool)
+#    (IPython kernel shutdown, drive.mount, files.upload, etc. — see shared workflow)
+#    Remember removed lines and their positions for restoration in step 9.
+
+# 8. Test
 if [ -f "$PROJECT_DIR/.env" ]; then export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs); fi
 uv run --python venv_notebook/bin/python <notebook_name>.py
 
-# 8. Fix errors and re-test until passing
+# 9. Fix errors and re-test until passing
 
-# 9. Convert to notebook
+# 10. Restore removed Colab-specific lines in <notebook_name>.py (Edit tool)
+
+# 11. Convert to notebook
 $PROJECT_DIR/.venv_tools/bin/jupytext --to notebook <notebook_name>.py --output $PROJECT_DIR/notebooks/<notebook_name>.ipynb
 
 # 10. Cleanup
