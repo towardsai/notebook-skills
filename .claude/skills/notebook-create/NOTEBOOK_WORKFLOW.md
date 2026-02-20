@@ -104,8 +104,12 @@ Some notebooks contain code that only works in Google Colab and will fail or beh
 | `from google.colab import drive` / `drive.mount(...)` | Google Drive not available locally |
 | `from google.colab import files` + `files.upload()` / `files.download()` | Interactive file dialogs not available locally |
 | `from google.colab import output` (non-fallback usage) | Colab-only display API |
+| `display(...)` calls where `display` is not explicitly imported | Jupyter kernels auto-inject `display` into the global namespace; plain Python scripts do not — raises `NameError` |
+| Helper functions whose sole purpose is to call `display()` (e.g. `display_image()`), and their call sites | No visual rendering target locally; calling them raises `NameError` on `display` |
 
 > **Note:** `from google.colab import userdata` is **not** in this list — it's already handled by the existing try/except fallback pattern and works correctly locally.
+>
+> **Note on `display`:** If a notebook imports `display` explicitly (`from IPython.display import display`) and uses it to render results that are meaningful to the script's logic, that is fine. Only remove `display` calls that serve purely visual/interactive purposes and would be no-ops or errors in a script context.
 
 ### Handling Strategy by Skill
 
