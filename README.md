@@ -49,6 +49,9 @@ The skills will set up jupytext and other tools automatically on first use.
 4. If a `.env` file exists in the project root, its variables are auto-loaded before execution
 5. The script is executed to verify correctness
 6. On success, the script is converted back to `.ipynb` (create/edit only — test is read-only)
+   - **notebook-create** saves the output at the project root as `<name>.ipynb` (or `<name>_v2.ipynb`, `_v3`, … if the file already exists)
+   - **notebook-edit** saves next to the original as `<name>_v2.ipynb` (or `_v3`, … if needed) — the original is never overwritten
+   - A different output path can be requested explicitly
 7. All temporary files are cleaned up
 
 ### Environment variables

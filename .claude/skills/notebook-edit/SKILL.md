@@ -78,11 +78,23 @@ If errors occur, fix them in the `.py` file and re-test. See the shared workflow
 
 Before converting, restore any Colab-specific lines that were removed in step 5. Use the Edit tool to add them back in their original positions in the `.py` file.
 
-Once restored:
+Once restored, determine the versioned output path (never overwrite the original) and convert:
 
 ```bash
-$PROJECT_DIR/.venv_tools/bin/jupytext --to notebook <notebook_name>.py --output $PROJECT_DIR/notebooks/<notebook_name>.ipynb
+# Auto-increment version suffix — start at _v2
+ORIG_DIR="$(dirname "$PROJECT_DIR/notebooks/<notebook_name>.ipynb")"
+BASE="$ORIG_DIR/<notebook_name>"
+VERSION=2
+OUTPUT="${BASE}_v${VERSION}.ipynb"
+while [ -f "$OUTPUT" ]; do
+  VERSION=$((VERSION + 1))
+  OUTPUT="${BASE}_v${VERSION}.ipynb"
+done
+$PROJECT_DIR/.venv_tools/bin/jupytext --to notebook <notebook_name>.py --output "$OUTPUT"
+echo "Saved as: $OUTPUT"
 ```
+
+If the user specifies a different output path or filename, use that instead.
 
 ### 7. Cleanup
 
@@ -125,9 +137,13 @@ uv run --python venv_notebook/bin/python <notebook_name>.py
 
 # 9. Restore removed Colab-specific lines in <notebook_name>.py (Edit tool)
 
-# 10. Convert back to notebook
-$PROJECT_DIR/.venv_tools/bin/jupytext --to notebook <notebook_name>.py --output $PROJECT_DIR/notebooks/<notebook_name>.ipynb
+# 10. Determine versioned output path and convert back to notebook
+ORIG_DIR="$(dirname "$PROJECT_DIR/notebooks/<notebook_name>.ipynb")"
+BASE="$ORIG_DIR/<notebook_name>"; VERSION=2; OUTPUT="${BASE}_v${VERSION}.ipynb"
+while [ -f "$OUTPUT" ]; do VERSION=$((VERSION+1)); OUTPUT="${BASE}_v${VERSION}.ipynb"; done
+$PROJECT_DIR/.venv_tools/bin/jupytext --to notebook <notebook_name>.py --output "$OUTPUT"
+echo "Saved as: $OUTPUT"
 
-# 9. Cleanup
+# 11. Cleanup
 cd "$PROJECT_DIR" && rm -rf "$TEMP_DIR"
 ```
