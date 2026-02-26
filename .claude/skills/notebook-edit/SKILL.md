@@ -56,6 +56,8 @@ If installation fails due to dependency conflicts, follow the dependency validat
 
 Edit the `.py` file to implement the user's requested changes. Keep changes minimal and focused.
 
+**Always fix grammar and typos** in user-facing strings within code cells (e.g. print messages, prompts, LLM instructions, comments shown to users). Do this alongside the requested changes — no need for the user to ask separately.
+
 If you add or change dependencies:
 - Re-validate using the full dependency validation workflow from the shared workflow
 - Update the `!pip install` line in the `.py` file with the verified versions
@@ -121,7 +123,7 @@ grep -E "^# !pip install" <notebook_name>.py | sed 's/^# !pip install //' > requ
 uv venv venv_notebook
 uv pip install --python venv_notebook $(cat requirements.txt)
 
-# 4. Make edits to <notebook_name>.py (minimal changes)
+# 4. Make edits to <notebook_name>.py (minimal changes + fix grammar/typos in strings)
 
 # 5. If deps changed: re-validate (see shared workflow)
 
