@@ -81,11 +81,21 @@ All notebooks must start with dependency installation cells for Google Colab com
 import package1
 ```
 
-**Version management:**
-- Always specify exact versions (e.g., `package==1.2.3`)
-- Use the latest stable versions available on PyPI
+### Colab Pre-installed Libraries Reference
 
-**How jupytext handles `!pip install`:**
+The file `$PROJECT_DIR/.claude/skills/notebook-create/colab_libraries.txt` contains a `pip freeze` snapshot from Google Colab. **Consult this file when choosing package versions** to ensure the `!pip install` cell works on both Colab and locally:
+
+- **Pick versions compatible with Colab's environment.** If Colab has `numpy==2.0.2`, don't pin a dependency that requires `numpy<2`.
+- **Include all notebook dependencies in `!pip install`**, even if they're already on Colab. This ensures the notebook also works locally where nothing is pre-installed.
+- **Use the latest stable versions** unless a Colab constraint forces a specific version.
+
+### Version management
+
+- Always specify exact versions (e.g., `package==1.2.3`)
+- All packages the notebook imports must appear in the `!pip install` cell (except stdlib modules)
+
+### How jupytext handles `!pip install`
+
 - jupytext converts `!pip install` cells to `# !pip install` comments in `.py` files
 - These don't execute when running the Python script locally (which is correct)
 - We extract these to install in the virtual environment instead
@@ -121,11 +131,11 @@ Some notebooks contain code that only works in Google Colab and will fail or beh
 
 ## Dependency Validation Workflow
 
-Notebooks specify exact package versions in `!pip install` cells. These versions MUST be installable together without conflicts.
+Notebooks specify exact package versions in `!pip install` cells. These versions MUST be installable together without conflicts, and must be compatible with Google Colab's environment.
 
 ### Step 1: Define Packages
 
-For **new notebooks**, create a `packages.txt` file with package names (no versions):
+For **new notebooks**, create a `packages.txt` file with all packages the notebook needs (no versions):
 
 ```bash
 cat > packages.txt << 'EOF'
@@ -172,6 +182,12 @@ for pkg in packages:
 " | tee verified_versions.txt
 ```
 
+### Step 3.5: Check Colab Compatibility
+
+Before proceeding, verify the resolved versions are compatible with Colab's environment. Read `$PROJECT_DIR/.claude/skills/notebook-create/colab_libraries.txt` and check for conflicts — e.g., if a resolved dependency requires `numpy>=3` but Colab has `numpy==2.0.2`, you need to pick a different version or package.
+
+If there are conflicts, adjust package choices or pin specific versions and re-run from Step 2.
+
 ### Step 4: Validate Pinned Versions
 
 Test if the exact pinned versions can be installed together in a fresh environment:
@@ -194,6 +210,7 @@ fi
 - Install without pins first, then validate the resolved versions work when pinned
 - Keep conversion tools (jupytext) separate from notebook runtime dependencies
 - If you find conflicts, try different package combinations before giving up
+- Always check resolved versions against `colab_libraries.txt` for Colab compatibility
 
 ---
 

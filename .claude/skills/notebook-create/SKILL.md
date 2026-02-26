@@ -47,7 +47,8 @@ Choose packages based on the notebook's topic. Do NOT pin versions yet.
 Follow the full dependency validation workflow from the shared workflow:
 1. Install without pins to find compatible versions
 2. Record the resolved versions
-3. Validate the pinned versions in a fresh venv
+3. Check resolved versions against `colab_libraries.txt` for Colab compatibility
+4. Validate the pinned versions in a fresh venv
 
 ### 4. Write the Notebook .py File
 
@@ -149,6 +150,8 @@ for pkg in packages:
     except: pass
 " > verified_versions.txt
 cat verified_versions.txt
+
+# 4.5. Check versions against colab_libraries.txt for Colab compatibility
 
 # 5. Validate pinned versions
 rm -rf venv_notebook && uv venv venv_notebook

@@ -50,7 +50,7 @@ uv venv venv_notebook
 uv pip install --python venv_notebook $(cat requirements.txt) 2>&1 | tee install_log.txt
 ```
 
-If installation fails due to dependency conflicts, follow the dependency validation workflow in the shared workflow to resolve them.
+If installation fails due to dependency conflicts, follow the dependency validation workflow in the shared workflow to resolve them. When adding new dependencies, check `$PROJECT_DIR/.claude/skills/notebook-create/colab_libraries.txt` to ensure version compatibility with Colab.
 
 ### 4. Make Edits
 
