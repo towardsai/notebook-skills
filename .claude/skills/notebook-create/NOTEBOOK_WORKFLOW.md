@@ -89,6 +89,18 @@ The file `$PROJECT_DIR/.claude/skills/notebook-create/colab_libraries.txt` conta
 - **Include all notebook dependencies in `!pip install`**, even if they're already on Colab. This ensures the notebook also works locally where nothing is pre-installed.
 - **Use the latest stable versions** unless a Colab constraint forces a specific version.
 
+### Async/Await Support
+
+If the notebook uses `async`/`await` (e.g., async functions, `await` calls), add `nest_asyncio` to enable compatibility with Colab's existing event loop:
+
+1. Include `nest_asyncio` in the `!pip install` cell
+2. Add the following lines early in the notebook (right after the imports cell):
+
+```python
+import nest_asyncio
+nest_asyncio.apply()
+```
+
 ### Version management
 
 - Always specify exact versions (e.g., `package==1.2.3`)
