@@ -325,6 +325,45 @@ uv run --python venv_notebook/bin/python <notebook_name>.py
 
 ---
 
+## Colab Resource Limits
+
+Google Colab's free tier provides limited resources. Notebooks **must** run within these constraints:
+
+- **RAM:** 12 GB
+- **GPU VRAM:** 15 GB (T4 GPU)
+- **Disk:** ~100 GB
+
+### Guidelines
+
+- **Choose small/quantized models.** For local inference, prefer models that fit in ≤ 14 GB VRAM (e.g., 7B-parameter models in 4-bit quantization). Never load models that exceed 15 GB.
+- **Limit dataset sizes.** Load only subsets of large datasets (e.g., `dataset[:1000]`). Avoid loading multi-GB datasets into memory at once.
+- **Stream large outputs.** When generating long texts or processing many items, process in batches and free memory between iterations.
+- **Monitor memory usage.** For memory-intensive notebooks, include a cell that prints resource usage:
+  ```python
+  import psutil
+  print(f"RAM used: {psutil.virtual_memory().used / 1e9:.1f} GB / {psutil.virtual_memory().total / 1e9:.1f} GB")
+  ```
+- **Clear GPU memory** when switching between models or after heavy computation:
+  ```python
+  import torch, gc
+  torch.cuda.empty_cache()
+  gc.collect()
+  ```
+
+### GPU Requirement Disclosure
+
+If a notebook requires a GPU (e.g., for model inference, training, or CUDA operations), it **must** include a markdown cell near the top — right after the title cell — stating the requirement:
+
+```python
+# %% [markdown]
+# > **Runtime:** This notebook requires a GPU runtime. In Google Colab, go to
+# > **Runtime → Change runtime type** and select **T4 GPU**.
+```
+
+This ensures users enable the GPU before running and avoids confusing CUDA errors.
+
+---
+
 ## LLM Defaults
 
 - **Use the Gemini models already present in the notebook.** Do not change them unless the user asks.

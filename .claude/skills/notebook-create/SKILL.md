@@ -56,7 +56,9 @@ Now that you have verified pinned versions, write the full `<notebook_name>.py` 
 
 1. Use the Write tool to create the file
 2. Use the exact versions from `verified_versions.txt` in the `!pip install` line
-3. Structure with proper cell markers:
+3. **If the notebook needs a GPU**, add a markdown cell right after the title stating the requirement (see "GPU Requirement Disclosure" in the shared workflow)
+4. Keep resource usage within Colab's free-tier limits (12 GB RAM, 15 GB GPU VRAM) — see "Colab Resource Limits" in the shared workflow
+5. Structure with proper cell markers:
 
 ```python
 # %% [markdown]

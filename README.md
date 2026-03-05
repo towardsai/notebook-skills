@@ -65,6 +65,10 @@ OPENAI_API_KEY=your-key-here
 
 The skills automatically load it before running notebooks. No manual `export` needed.
 
+### Colab resource limits
+
+Notebooks are designed to run within Google Colab's free-tier resources (12 GB RAM, 15 GB GPU VRAM). If a notebook requires a GPU, it includes a markdown cell at the top instructing users to enable the T4 GPU runtime.
+
 ### Library management
 
 Notebooks are Colab-ready: they start with `!pip install package==1.2.3` cells with pinned versions. The skills validate that all pinned versions install together without conflicts before writing the notebook.
